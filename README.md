@@ -1,1 +1,84 @@
-# Vote-page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vote for Leader</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin-top: 60px;
+      font-size: 2em;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .card {
+      background: #ffffff;
+      color: #333;
+      border-radius: 12px;
+      padding: 30px;
+      margin-top: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      background: #2a5298;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #1e3c72;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Vote for the Leader</h1>
+  <div class="card">
+    <button onclick="vote('Quagmire')">Vote Quagmire</button>
+    <button onclick="vote('Charlie')">Vote Charlie</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function vote(candidate) {
+      fetch('https://script.google.com/macros/s/AKfycbyivsWfZCx-cPcpWNj7njHtfz0tlt4-yQMRcdcniOHpGVYC27Uz6vHeaLhY0yso6t75yA/exec?candidate=' + encodeURIComponent(candidate))
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById("result").innerText = "Your vote for " + candidate + " has been recorded!";
+        })
+        .catch(error => {
+          document.getElementById("result").innerText = "Something went wrong. Try again.";
+          console.error(error);
+        });
+    }
+  </script>
+</body>
+</html>
