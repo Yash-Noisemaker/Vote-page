@@ -68,17 +68,15 @@
   </div>
 
   <script>
-    function vote(candidate) {
-      fetch('https://script.google.com/macros/s/AKfycbyivsWfZCx-cPcpWNj7njHtfz0tlt4-yQMRcdcniOHpGVYC27Uz6vHeaLhY0yso6t75yA/exec?candidate=' + encodeURIComponent(candidate))
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById("result").innerText = "Your vote for " + candidate + " has been recorded!";
-        })
-        .catch(error => {
-          document.getElementById("result").innerText = "Something went wrong. Try again.";
-          console.error(error);
-        });
-    }
-  </script>
+  function vote(candidate) {
+    fetch("https://script.google.com/macros/s/AKfycbyivsWfZCx-cPcpWNj7njHtfz0tlt4-yQMRcdcniOHpGVYC27Uz6vHeaLhY0yso6t75yA/exec?candidate=" + candidate)
+      .then(response => response.text())
+      .then(result => {
+        alert("Vote submitted for " + candidate);
+        showResults();
+      });
+  }
+</script>
+
 </body>
 </html>
