@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vote for Your Leader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e0ecf8, #f4f7fc);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 40px 20px;
+      color: #2e3a59;
+    }
+
+    .card {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .vote-buttons {
+      display: grid;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .vote-buttons button {
+      background: #4e73df;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .vote-buttons button:hover {
+      background: #2e59d9;
+    }
+
+    #results {
+      margin-top: 30px;
+      text-align: left;
+    }
+
+    #results h2 {
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    #resultList {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    #resultList li {
+      margin: 5px 0;
+      font-weight: 500;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Vote for Your Leader</h1>
+    <div class="vote-buttons">
+      <button onclick="submitVote('Quagmire')">Quagmire</button>
+      <button onclick="submitVote('Charlie')">Charlie</button>
+    </div>
+
+    <div id="results" style="display:none;">
+      <h2>Live Results</h2>
+      <ul id="resultList"></ul>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbyivsWfZCx-cPcpWNj7njHtfz0tlt4-yQMRcdcniOHpGVYC27Uz6vHeaLhY0yso6t75yA/exec"; // 🔁 Replace this with your Google Apps Script Web App URL
+
+    function submitVote(name) {
+      fetch(API_URL + "?candidate=" + name, { method: "POST" })
+        .then(res => res.text())
+        .then(() => {
+          alert("Thanks for voting!");
+          showResults();
+        })
+        .catch(() => alert("Error submitting vote."));
+    }
+
+    function showResults() {
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('results').style.display = 'block';
+          const list = document.getElementById('resultList');
+          list.innerHTML = '';
+
+          let maxVotes = 0;
+          let winner = '';
+
+          for (let key in data) {
+            const votes = data[key];
+            const item = document.createElement('li');
+            item.textContent = `${key}: ${votes} vote${votes > 1 ? 's' : ''}`;
+            list.appendChild(item);
+
+            if (votes > maxVotes) {
+              maxVotes = votes;
+              winner = key;
+            }
+          }
+
+          const winnerText = document.createElement('div');
+          winnerText.style.marginTop = "20px";
+          winnerText.style.fontWeight = "600";
+          winnerText.style.fontSize = "18px";
+          winnerText.style.color = "#28a745";
+          winnerText.textContent = `🏆 Current Leader: ${winner} with ${maxVotes} vote${maxVotes > 1 ? 's' : ''}`;
+          list.appendChild(winnerText);
+        });
+    }
+  </script>
+</body>
+</html>
